@@ -1,11 +1,13 @@
 package com.skyhope.tagview;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.skyhope.materialtagview.TagView;
-import com.skyhope.materialtagview.enums.TagSeparator;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
        // tagView.setTagBackgroundColor(Color.RED);
 
-        String[] tagList = new String[]{"C++", "Java", "PHP"};
+        String[] tagList = new String[]{"C++", "Java", "PHP", "Kotlin", "Javascript", "Dart"};
         tagView.setTagList(tagList);
 
     }
@@ -36,5 +38,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+    }
+
+    public void onClickTest(View v) {
+        Log.d("tags", "Click!");
+        tagView.addTagsFromList(Arrays.asList("C++", "Java", "Dart"));
     }
 }

@@ -32,4 +32,18 @@ public class TagModel {
     public void setFromList(boolean fromList) {
         isFromList = fromList;
     }
+
+    // Overriding equals() to compare two Complex objects
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (tagText == null)
+            return false; // don't care about nulls, just for safety
+        if (o instanceof TagModel) {
+            TagModel tm = (TagModel) o;
+            return isFromList == tm.isFromList && tagText.equals(tm.tagText);
+        }
+        return false;
+    }
 }

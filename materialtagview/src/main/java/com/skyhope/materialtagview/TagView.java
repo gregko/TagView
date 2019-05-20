@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -35,6 +34,7 @@ import com.skyhope.materialtagview.model.TagModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 /*
  *  ****************************************************************************
@@ -52,8 +52,8 @@ import java.util.List;
 
 public class TagView extends FlexboxLayout implements TagClickListener {
 
-    private List<TagModel> mTagList = new ArrayList<>();
-    private List<View> mTagViewList = new ArrayList<>();
+    private List<TagModel> mTagList = new ArrayList<>(); // tags currently selected
+    private List<String> mTagItemList = new ArrayList<>(); // all defined tags, minus the ones currently selected
 
     private EditText editText;
     private RecyclerView recyclerView;
@@ -101,8 +101,6 @@ public class TagView extends FlexboxLayout implements TagClickListener {
 
     private TagItemListener mTagItemListener;
 
-    private List<String> mTagItemList = new ArrayList<>();
-
     public TagView(Context context) {
         super(context);
     }
@@ -126,6 +124,46 @@ public class TagView extends FlexboxLayout implements TagClickListener {
 
     }
 
+    public void addTagsFromList(List<String> tagsToAdd) {
+        if (tagsToAdd == null)
+            return;
+        for (String text : tagsToAdd) {
+            TagModel model = new TagModel();
+            model.setTagText(text);
+            model.setFromList(true); // assuming all strings are from the list of all tags
+            if (!mTagList.contains(model)) {
+                mTagList.add(model);
+                mAdapter.removeTagItem(model.getTagText());
+                addTagInView();
+            }
+        }
+    }
+
+    public void clearSelectedTags() {
+        int first = -1, count = 0;
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            View img = child.findViewById(R.id.image_view_cross);
+            if (first < 0 && img != null)
+                first = i;
+            else if (first >= 0 && img == null) {
+                count = i - first;
+                break;
+            }
+        }
+        Iterator<TagModel> it = mTagList.iterator();
+        while (it.hasNext()) {
+            TagModel tm = it.next();
+            if (tm.isFromList() && !mTagItemList.contains(tm)) {
+                mAdapter.addItem(tm.getTagText());
+            }
+        }
+        mTagList.clear();
+        if (first > -1 && count > 0)
+            removeViews(first, count);
+        invalidate();
+    }
+
     private void init(AttributeSet attributeSet) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.TagView);
 
@@ -138,7 +176,6 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         mCrossDrawable = typedArray.getDrawable(R.styleable.TagView_close_icon);
 
         mTagLimitMessage = typedArray.getString(R.styleable.TagView_limit_error_text);
-
 
         int separator = typedArray.getInt(R.styleable.TagView_tag_separator, 0);
 
@@ -203,8 +240,6 @@ public class TagView extends FlexboxLayout implements TagClickListener {
             mTagItemListener.onGetAddedItem(model);
         }
 
-        // mTagViewList.add(view);
-
         invalidate();
 
     }
@@ -220,7 +255,7 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         textViewAdd = new TextView(getContext());
 
         editText.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
+        editText.setSingleLine(true);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -236,13 +271,18 @@ public class TagView extends FlexboxLayout implements TagClickListener {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().contains(tagSeparator)) {
+                    String s = editable.toString().trim();
+                    if (s.length() == 0) {
+                        editText.setText(s);
+                        return;
+                    }
                     if (mTagList.size() < tagLimit) {
                         String tagText = editable.toString();
                         tagText = tagText.replace(tagSeparator, EMPTY_STRING);
 
                         addTag(tagText, false);
 
-                        editText.setText("");
+                        editText.setText("" );
                     } else {
                         showTagLimitMessage();
                     }
@@ -313,6 +353,15 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         mTagList.add(model);
 
         addTagInView();
+
+//        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View tagView = inflater.inflate(R.layout.tag_layout, null);
+//        removeView(tagView);
+//        mTagList.remove(model);
+//
+//        if (model.isFromList()) {
+//            mAdapter.addItem(model.getTagText());
+//        }
     }
 
     /**
@@ -391,7 +440,7 @@ public class TagView extends FlexboxLayout implements TagClickListener {
 
         addTag(tagText, true);
 
-        mAdapter.removeTagItem(position, tagText);
+        mAdapter.removeTagItem(tagText);
     }
 
 

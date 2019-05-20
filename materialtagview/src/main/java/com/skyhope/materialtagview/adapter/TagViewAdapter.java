@@ -1,8 +1,8 @@
 package com.skyhope.materialtagview.adapter;
 
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,15 +113,18 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
     /**
      * Remove item When user select a Tag from list
      *
-     * @param position Item Position
+     * @param tag Item tag text
      */
-    public void removeTagItem(int position, String tag) {
-        if (mTagItemList != null && mTagItemList.size() >= position) {
-            mTagItemList.remove(tag);
-            notifyItemRemoved(position);
+    public void removeTagItem(String tag) {
+        int position = -1;
+        if (mTagItemList != null) {
+            position = mTagItemList.indexOf(tag);
+            if (position >= 0) {
+                mTagItemList.remove(tag);
+                notifyItemRemoved(position);
+            }
         }
-
-        if (mBackUpList != null && mBackUpList.size() >= position) {
+        if (mBackUpList != null && position >= 0) {
             mBackUpList.remove(tag);
         }
     }
