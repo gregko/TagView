@@ -1,3 +1,9 @@
+Note about gregko's fork:
+
+This fork of mahimrocky's TagView is used in @Voice Aloud Reader. I needed to add some functionality to make it fully usable within my app needs.
+
+Original README.md by mahimrocky follows.
+
 [![Release](https://jitpack.io/v/mahimrocky/TagView.svg)](https://github.com/mahimrocky/TagView/releases/tag/1.0.1)
 # TagView
 
