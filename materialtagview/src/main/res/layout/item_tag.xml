@@ -9,7 +9,7 @@
         android:id="@+id/tag_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="2dp"
         android:background="@drawable/drawable_tag"
         android:gravity="center"
         android:orientation="horizontal"
@@ -20,9 +20,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:maxLines="1"
-            android:text="Hello"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Hello!"
             android:textColor="@color/white" />
 
     </LinearLayout>

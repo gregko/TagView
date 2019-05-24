@@ -6,6 +6,8 @@
         <attr name="tag_limit" format="integer" />
         <attr name="close_icon" format="reference" />
         <attr name="limit_error_text" format="string" />
+        <attr name="add_from_edit" format="boolean" />
+        <attr name="edit_hint" format="string" />
         <attr name="tag_separator" format="enum">
 
             <enum name="COMMA_SEPARATOR" value="1" />

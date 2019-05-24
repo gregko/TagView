@@ -91,6 +91,8 @@ public class TagView extends FlexboxLayout implements TagClickListener {
 
     private String mTagLimitMessage;
 
+    private boolean mAddNewFromEdit = true;
+
     /**
      * The both drawable and bitmap enable only when
      * other is null.
@@ -177,7 +179,13 @@ public class TagView extends FlexboxLayout implements TagClickListener {
 
         mTagLimitMessage = typedArray.getString(R.styleable.TagView_limit_error_text);
 
+        String hintText = typedArray.getString(R.styleable.TagView_edit_hint);
+        if (hintText != null)
+            setHint(hintText);
+
         int separator = typedArray.getInt(R.styleable.TagView_tag_separator, 0);
+
+        mAddNewFromEdit = typedArray.getBoolean(R.styleable.TagView_add_from_edit, true);
 
         tagSeparator = convertSeparator(separator);
 
@@ -277,12 +285,14 @@ public class TagView extends FlexboxLayout implements TagClickListener {
                         return;
                     }
                     if (mTagList.size() < tagLimit) {
-                        String tagText = editable.toString();
-                        tagText = tagText.replace(tagSeparator, EMPTY_STRING);
+                        if (mAddNewFromEdit) {
+                            String tagText = editable.toString();
+                            tagText = tagText.replace(tagSeparator, EMPTY_STRING);
 
-                        addTag(tagText, false);
-
+                            addTag(tagText, false);
+                        }
                         editText.setText("" );
+
                     } else {
                         showTagLimitMessage();
                     }
@@ -291,7 +301,7 @@ public class TagView extends FlexboxLayout implements TagClickListener {
                     mAdapter.getFilter().filter(editable.toString());
                     mAdapter.notifyDataSetChanged();
 
-                    if (mAdapter.getItemCount() == 0) {
+                    if (mAdapter.getItemCount() == 0 && mAddNewFromEdit) {
                         textViewAdd.setVisibility(VISIBLE);
                         recyclerView.setVisibility(GONE);
                         textViewAdd.setText(editable.toString());
@@ -307,8 +317,6 @@ public class TagView extends FlexboxLayout implements TagClickListener {
                 }
             }
         });
-
-
     }
 
     private String convertSeparator(int separator) {
@@ -612,4 +620,11 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         return mTagList;
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        editText.setEnabled(enabled);
+        recyclerView.setEnabled(enabled);
+        textViewAdd.setEnabled(enabled);
+    }
 }

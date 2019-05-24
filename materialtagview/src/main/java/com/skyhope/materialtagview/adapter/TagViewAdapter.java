@@ -159,7 +159,7 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
         };
     }
 
-    class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textViewTag;
         LinearLayout tagContainer;
 
