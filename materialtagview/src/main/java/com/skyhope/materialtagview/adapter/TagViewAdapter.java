@@ -80,7 +80,6 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
      */
     public void addItems(List<String> tagList) {
         if (mTagItemList != null) {
-            mTagItemList.clear();
             mTagItemList = tagList;
         }
         if (mBackUpList != null) {

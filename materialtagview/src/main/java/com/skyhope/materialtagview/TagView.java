@@ -469,6 +469,10 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         editText.setHint(hint);
     }
 
+    public void addNewFromEdit(boolean b) {
+        mAddNewFromEdit = b;
+    }
+
     /**
      * Add Tag separator within Defined Separator
      *
@@ -596,6 +600,17 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         mTagItemList = tagList;
 
         addRecyclerView();
+    }
+
+    public void modifyTagList(List<String> tagList) {
+        if (mTagItemList == null)
+            mTagItemList = new ArrayList<>();
+        else
+            mTagItemList.clear();
+        mTagList.clear();
+        mTagItemList.addAll(tagList);
+        mAdapter.addItems(mTagItemList);
+        invalidate();
     }
 
     /**
