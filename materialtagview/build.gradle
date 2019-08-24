@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion project.USE_SDK_VERSION
+    compileSdkVersion USE_SDK_VERSION
 
     defaultConfig {
         minSdkVersion 16
