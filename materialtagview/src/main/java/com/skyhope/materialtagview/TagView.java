@@ -141,6 +141,18 @@ public class TagView extends FlexboxLayout implements TagClickListener {
         }
     }
 
+    public void addTagsFromModelList(List<TagModel> tagsToAdd) {
+        if (tagsToAdd == null)
+            return;
+        for (TagModel model : tagsToAdd) {
+            if (!mTagList.contains(model)) {
+                mTagList.add(model);
+                mAdapter.removeTagItem(model.getTagText());
+                addTagInView();
+            }
+        }
+    }
+
     public void clearSelectedTags() {
         int first = -1, count = 0;
         for (int i = 0; i < getChildCount(); i++) {

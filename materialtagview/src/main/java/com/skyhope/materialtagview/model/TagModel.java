@@ -17,6 +17,13 @@ public class TagModel {
     private String tagText;
     private boolean isFromList;
 
+    public TagModel() {}
+
+    public TagModel(String text, boolean fromList) {
+        tagText = text;
+        isFromList = fromList;
+    }
+
     public String getTagText() {
         return tagText;
     }
