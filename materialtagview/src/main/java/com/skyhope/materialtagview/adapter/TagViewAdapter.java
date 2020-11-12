@@ -58,6 +58,8 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.TagViewH
 
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder tagViewHolder, int i) {
+        if (i >= mTagItemList.size())
+            return;
         String tag = mTagItemList.get(i);
 
         tagViewHolder.textViewTag.setTextColor(mTagTextColor);
